@@ -23,22 +23,22 @@ Mark any fields you want to stream in batches with `enc:"batch"`.
 
 ```go
 type Parcel struct {
-	ID       string   `json:"id"`
-	Name     string   `json:"name"`
-	Items    []*Item  `json:"items" enc:"batch"`
-	Metadata []string `json:"metadata" enc:"batch"`
-	Tags     []*Tag   `json:"tags"`
+  ID       string   `json:"id"`
+  Name     string   `json:"name"`
+  Items    []*Item  `json:"items" enc:"batch"`
+  Metadata []string `json:"metadata" enc:"batch"`
+  Tags     []*Tag   `json:"tags"`
 }
 
 type Item struct {
-	SKU    string  `json:"sku"`
-	Name   string  `json:"name"`
-	Weight float64 `json:"weight"` // in kgs
+  SKU    string  `json:"sku"`
+  Name   string  `json:"name"`
+  Weight float64 `json:"weight"` // in kgs
 }
 
 type Tag struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+  ID   string `json:"id"`
+  Name string `json:"name"`
 }
 ```
 
