@@ -9,7 +9,7 @@ import (
 
 	_ "embed"
 
-	"github.com/dsnidr/encgen/parser"
+	"github.com/dsnidr/encgen-go/parser"
 )
 
 //go:embed template.gotmpl

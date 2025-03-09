@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/dsnidr/encgen/example"
+	"github.com/dsnidr/encgen-go/example"
 )
 
 func main() {

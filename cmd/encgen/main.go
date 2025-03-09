@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/dsnidr/encgen/generator"
-	"github.com/dsnidr/encgen/parser"
+	"github.com/dsnidr/encgen-go/generator"
+	"github.com/dsnidr/encgen-go/parser"
 )
 
 func main() {
