@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"runtime/debug"
 	"strings"
 
 	"github.com/dsnidr/encgen-go/generator"
@@ -18,7 +19,18 @@ func run() int {
 	name := flag.String("name", "", "The name of the input struct")
 	inpath := flag.String("inpath", ".", "The location of the input struct")
 	outpath := flag.String("outpath", ".", "The output location you want the generator code written to")
+	showVersion := flag.Bool("version", false, "Outputs the version of encgen and exits")
 	flag.Parse()
+
+	if *showVersion {
+		version := "unknown"
+		if info, ok := debug.ReadBuildInfo(); ok && info.Main.Version != "" {
+			version = info.Main.Version
+		}
+
+		fmt.Fprintf(os.Stdout, "encgen version: %s\n", version)
+		return 0
+	}
 
 	if strings.TrimSpace(*name) == "" {
 		fmt.Fprintln(os.Stderr, "the --name flag is required")
