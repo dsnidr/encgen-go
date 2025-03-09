@@ -6,6 +6,15 @@ import (
 	"unicode/utf8"
 )
 
+// Encoder is a struct which is embedded in all generated encoders. It provides a number of
+// helper functions to simplify generated code.
+//
+// In order to keep this easy to use, we do not return an error at each step.
+// Instead, we store the error in the `err` field, and skip future write operations
+// if `err` is not nil. This allows us to keep performance in case of an error, but
+// not require explicit error checks at every single step.
+//
+// Errors can be checked for manually using the `Error()` method.
 type Encoder struct {
 	w   io.Writer
 	err error
