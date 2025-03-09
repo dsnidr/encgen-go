@@ -22,13 +22,13 @@ func run() int {
 	showVersion := flag.Bool("version", false, "Outputs the version of encgen and exits")
 	flag.Parse()
 
-	if *showVersion {
-		version := "unknown"
-		if info, ok := debug.ReadBuildInfo(); ok && info.Main.Version != "" {
-			version = info.Main.Version
-		}
+	version := "unknown"
+	if info, ok := debug.ReadBuildInfo(); ok && info.Main.Version != "" {
+		version = info.Main.Version
+	}
 
-		fmt.Fprintf(os.Stdout, "encgen version: %s\n", version)
+	if *showVersion {
+		fmt.Fprintf(os.Stdout, "encgen version %s\n", version)
 		return 0
 	}
 
@@ -43,7 +43,7 @@ func run() int {
 		return 1
 	}
 
-	if err := generator.GenerateEncoder(parsedStruct, *outpath); err != nil {
+	if err := generator.GenerateEncoder(parsedStruct, *outpath, version); err != nil {
 		fmt.Fprintf(os.Stderr, "error generating encoder: %v\n", err)
 		return 1
 	}

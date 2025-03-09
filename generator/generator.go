@@ -15,7 +15,12 @@ import (
 //go:embed template.gotmpl
 var encoderTemplate string
 
-func GenerateEncoder(structInfo *parser.StructInfo, outPath string) error {
+type TemplateData struct {
+	Version string
+	*parser.StructInfo
+}
+
+func GenerateEncoder(structInfo *parser.StructInfo, outPath, version string) error {
 	tmpl := template.New("encoder").Funcs(template.FuncMap{
 		"nextFieldType":     nextFieldType,
 		"nextFieldTypeName": nextFieldTypeName,
@@ -33,7 +38,10 @@ func GenerateEncoder(structInfo *parser.StructInfo, outPath string) error {
 	}
 	defer outFile.Close()
 
-	if err := tmpl.Execute(outFile, structInfo); err != nil {
+	if err := tmpl.Execute(outFile, &TemplateData{
+		Version:    version,
+		StructInfo: structInfo,
+	}); err != nil {
 		return err
 	}
 
