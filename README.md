@@ -12,7 +12,7 @@
 ## Installation
 
 ```sh
-go install github.com/dsnidr/encgen-go/cmd/encgen@latest
+go install github.com/dsnidr/encgen-go/cmd/encgen@v0.1.0
 ```
 
 ## Usage
