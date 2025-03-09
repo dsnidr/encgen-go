@@ -55,7 +55,7 @@ encgen --name <struct name>
 or using `go generate`:
 
 ```go
-//go:generate go run github.com/dsnidr/encgen-go/cmd/encgen --name Parcel
+//go:generate encgen --name Parcel
 type Parcel struct {
   ...
 }
