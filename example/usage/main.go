@@ -18,26 +18,26 @@ func main() {
 
 	itemsEnc.AddItems(
 		&example.Item{
-			SKU:    "file1",
-			Name:   "test file 1",
+			SKU:    "item1",
+			Name:   "test item 1",
 			Weight: 592.0,
 		},
 		&example.Item{
-			SKU:    "file2",
-			Name:   "test file 2",
+			SKU:    "item2",
+			Name:   "test item 2",
 			Weight: 182.15,
 		},
 	)
 
 	itemsEnc.AddItems(
 		&example.Item{
-			SKU:    "file3",
-			Name:   "test file 3",
+			SKU:    "item3",
+			Name:   "test item 3",
 			Weight: 23717.85,
 		},
 		&example.Item{
-			SKU:    "file2",
-			Name:   "test file 4",
+			SKU:    "item2",
+			Name:   "test item 4",
 			Weight: 10.0,
 		},
 	)
