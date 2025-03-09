@@ -12,7 +12,7 @@
 ## Installation
 
 ```sh
-go install github.com/dsnidr/encgen/cmd/encgen@latest
+go install github.com/dsnidr/encgen-go/cmd/encgen@latest
 ```
 
 ## Usage
@@ -55,7 +55,7 @@ encgen --name <struct name>
 or using `go generate`:
 
 ```go
-//go:generate go run github.com/dsnidr/encgen/cmd/encgen --name Parcel
+//go:generate go run github.com/dsnidr/encgen-go/cmd/encgen --name Parcel
 type Parcel struct {
   ...
 }
