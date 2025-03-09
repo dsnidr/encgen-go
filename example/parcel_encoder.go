@@ -3,172 +3,168 @@
 package example
 
 import (
-	"io"
+  "io"
 
-	"github.com/dsnidr/encgen-go"
+  "github.com/dsnidr/encgen-go"
 )
 
 // ParcelEncoder is the root encoder for Parcel.
 // The user calls .Start() first to begin writing the JSON object.
 type ParcelEncoder struct {
-	enc *encgen.Encoder
+  enc *encgen.Encoder
 }
 
 // NewParcelEncoder creates a new streamable encoder for Parcel.
 func NewParcelEncoder(w io.Writer) *ParcelEncoder {
-	return &ParcelEncoder{
-		enc: encgen.NewEncoder(w),
-	}
+  return &ParcelEncoder{
+    enc: encgen.NewEncoder(w),
+  }
 }
 
 // Start begins writing the JSON object and returns the encoder for the first field.
 //
 // Example usage:
-//
-//	enc := NewParcelEncoder(w).Start().<FirstField>(...).<NextField>(...)...
+//   enc := NewParcelEncoder(w).Start().<FirstField>(...).<NextField>(...)...
 func (e *ParcelEncoder) Start() *ParcelIDEncoder {
-	e.enc.OpenObject()
-	return &ParcelIDEncoder{enc: e.enc}
+  e.enc.OpenObject()
+  return &ParcelIDEncoder{enc: e.enc}
 }
 
 // ParcelIDEncoder enforces writing of ID next.
 type ParcelIDEncoder struct {
-	enc        *encgen.Encoder
-	firstBatch bool
+  enc *encgen.Encoder
+  firstBatch bool
 }
-
 func (e *ParcelIDEncoder) ID(val string) *ParcelNameEncoder {
-	e.enc.Field("id", val)
-	e.enc.Comma()
+  e.enc.Field("id", val)
+  e.enc.Comma()
 
-	return &ParcelNameEncoder{enc: e.enc}
+  return &ParcelNameEncoder{enc: e.enc}
 }
 
 // ParcelNameEncoder enforces writing of Name next.
 type ParcelNameEncoder struct {
-	enc        *encgen.Encoder
-	firstBatch bool
+  enc *encgen.Encoder
+  firstBatch bool
 }
-
 func (e *ParcelNameEncoder) Name(val string) *ParcelItemsEncoderStarter {
-	e.enc.Field("name", val)
-	e.enc.Comma()
+  e.enc.Field("name", val)
+  e.enc.Comma()
 
-	return &ParcelItemsEncoderStarter{enc: e.enc}
+  return &ParcelItemsEncoderStarter{enc: e.enc}
 }
 
 type ParcelItemsEncoderStarter struct {
-	enc *encgen.Encoder
+  enc *encgen.Encoder
 }
 
 func (e *ParcelItemsEncoderStarter) StartItems() *ParcelItemsEncoder {
-	e.enc.String("\"items\":")
-	e.enc.OpenArray()
-	return &ParcelItemsEncoder{enc: e.enc, firstBatch: true}
+  e.enc.String("\"items\":")
+  e.enc.OpenArray()
+  return &ParcelItemsEncoder{enc: e.enc, firstBatch: true}
 }
 
 // ParcelItemsEncoder enforces writing of Items next.
 type ParcelItemsEncoder struct {
-	enc        *encgen.Encoder
-	firstBatch bool
+  enc *encgen.Encoder
+  firstBatch bool
 }
 
 // AddItems appends items to the batchable field "items".
 // Returns the same encoder, allowing chaining .AddItems(...).AddItems(...)
 func (e *ParcelItemsEncoder) AddItems(items ...*Item) *ParcelItemsEncoder {
-	if len(items) == 0 {
-		return e
-	}
+  if len(items) == 0 {
+    return e
+  }
 
-	if !e.firstBatch {
-		e.enc.Comma()
-	}
-	e.firstBatch = false
+  if !e.firstBatch {
+    e.enc.Comma()
+  }
+  e.firstBatch = false
 
-	for idx, item := range items {
-		e.enc.Marshal(item)
+  for idx, item := range items {
+    e.enc.Marshal(item)
 
-		if idx < len(items)-1 {
-			e.enc.Comma()
-		}
-	}
+    if idx < len(items)-1 {
+      e.enc.Comma()
+    }
+  }
 
-	return e
+  return e
 }
 
 // FinishItems finishes the batchable field and returns the next encoder in the chain.
 func (e *ParcelItemsEncoder) FinishItems() *ParcelMetadataEncoderStarter {
-	e.enc.CloseArray()
-	e.enc.Comma()
+  e.enc.CloseArray()
+  e.enc.Comma()
 
-	return &ParcelMetadataEncoderStarter{enc: e.enc}
+  return &ParcelMetadataEncoderStarter{enc: e.enc}
 }
 
 type ParcelMetadataEncoderStarter struct {
-	enc *encgen.Encoder
+  enc *encgen.Encoder
 }
 
 func (e *ParcelMetadataEncoderStarter) StartMetadata() *ParcelMetadataEncoder {
-	e.enc.String("\"metadata\":")
-	e.enc.OpenArray()
-	return &ParcelMetadataEncoder{enc: e.enc, firstBatch: true}
+  e.enc.String("\"metadata\":")
+  e.enc.OpenArray()
+  return &ParcelMetadataEncoder{enc: e.enc, firstBatch: true}
 }
 
 // ParcelMetadataEncoder enforces writing of Metadata next.
 type ParcelMetadataEncoder struct {
-	enc        *encgen.Encoder
-	firstBatch bool
+  enc *encgen.Encoder
+  firstBatch bool
 }
 
 // AddMetadata appends items to the batchable field "metadata".
 // Returns the same encoder, allowing chaining .AddMetadata(...).AddMetadata(...)
 func (e *ParcelMetadataEncoder) AddMetadata(items ...string) *ParcelMetadataEncoder {
-	if len(items) == 0 {
-		return e
-	}
+  if len(items) == 0 {
+    return e
+  }
 
-	if !e.firstBatch {
-		e.enc.Comma()
-	}
-	e.firstBatch = false
+  if !e.firstBatch {
+    e.enc.Comma()
+  }
+  e.firstBatch = false
 
-	for idx, item := range items {
-		e.enc.Marshal(item)
+  for idx, item := range items {
+    e.enc.Marshal(item)
 
-		if idx < len(items)-1 {
-			e.enc.Comma()
-		}
-	}
+    if idx < len(items)-1 {
+      e.enc.Comma()
+    }
+  }
 
-	return e
+  return e
 }
 
 // FinishMetadata finishes the batchable field and returns the next encoder in the chain.
 func (e *ParcelMetadataEncoder) FinishMetadata() *ParcelTagsEncoder {
-	e.enc.CloseArray()
-	e.enc.Comma()
+  e.enc.CloseArray()
+  e.enc.Comma()
 
-	return &ParcelTagsEncoder{enc: e.enc}
+  return &ParcelTagsEncoder{enc: e.enc}
 }
 
 // ParcelTagsEncoder enforces writing of Tags next.
 type ParcelTagsEncoder struct {
-	enc        *encgen.Encoder
-	firstBatch bool
+  enc *encgen.Encoder
+  firstBatch bool
 }
-
 func (e *ParcelTagsEncoder) Tags(val []*Tag) *ParcelFinishEncoder {
-	e.enc.Field("tags", val)
+  e.enc.Field("tags", val)
 
-	return &ParcelFinishEncoder{enc: e.enc}
+  return &ParcelFinishEncoder{enc: e.enc}
 }
 
 type ParcelFinishEncoder struct {
-	enc *encgen.Encoder
+  enc *encgen.Encoder
 }
 
 // Finish finalizes the JSON object and returns any error encountered.
 func (e *ParcelFinishEncoder) Finish() error {
-	e.enc.CloseObject()
-	return e.enc.Error()
+  e.enc.CloseObject()
+  return e.enc.Error()
 }
